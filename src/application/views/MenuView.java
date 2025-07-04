@@ -104,9 +104,9 @@ public class MenuView extends javax.swing.JFrame {
         
        Home.setLayout(new GridBagLayout()); // agar isi panel di tengah otomatis
 
-        JLabel homeLabel = new JLabel("Selamat Datang di Aplikasi");
-        JLabel homeLabel2 = new JLabel("Sistem Pendukung Keputusan Penilaian Kinerja Karyawan");
-        JLabel homeLabel3 = new JLabel("PT. Supra Primatama");
+        JLabel homeLabel = new JLabel("SELAMAT DATANG DI APLIKASI");
+        JLabel homeLabel2 = new JLabel("SISTEM PAKAR UNTUK EVALUASI KELAYAKAN DAN AKREDITASI TEMPAT UJI KOMPETENSI");
+        JLabel homeLabel3 = new JLabel("(TUK) LAS BERDASARKAN STANDAR NASIONAL MENGGUNAKAN METODE FUZZY LOGIC");
 
         homeLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
         homeLabel2.setFont(new Font("SansSerif", Font.BOLD, 24)); // bisa pakai font lain
@@ -130,14 +130,14 @@ public class MenuView extends javax.swing.JFrame {
         // Panel utama
         jPanel1.setLayout(new BorderLayout()); // penting supaya anak komponen fleksibel ukurannya
 
-        Sidebar.setBackground(Color.decode("#008FD5"));
+        Sidebar.setBackground(Color.decode("#00BD4F"));
         Sidebar.setPreferredSize(new Dimension(250, 0)); // 200px lebar, tinggi otomatis
         jPanel1.add(Sidebar, BorderLayout.WEST);
         
         jPanel2.setLayout(new BorderLayout());
         
         Header.setLayout(new BorderLayout());
-        Header.setBackground(Color.decode("#005EA6"));
+        Header.setBackground(Color.decode("#1b4526"));
         Header.setPreferredSize(new Dimension(0, 120));
         Header.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 40)); // Padding: atas, kiri, bawah, kanan
 
@@ -262,7 +262,7 @@ public class MenuView extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/logo_PT_Supra_Primatama_Nusantara-100.png"))); // NOI18N
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/logo_lsp-removebg-preview.png"))); // NOI18N
 
         perhitungan.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         perhitungan.setForeground(new java.awt.Color(255, 255, 255));
@@ -387,22 +387,25 @@ public class MenuView extends javax.swing.JFrame {
         SidebarLayout.setHorizontalGroup(
             SidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(SidebarLayout.createSequentialGroup()
-                .addGap(68, 68, 68)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(listData, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
-            .addComponent(perhitungan, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
-            .addComponent(perhitungan1, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SidebarLayout.createSequentialGroup()
+                .addGroup(SidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(listData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(SidebarLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(perhitungan, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
+                    .addComponent(perhitungan1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(perhitungan2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
             .addComponent(slideMenuLaporan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(perhitungan2, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
         );
         SidebarLayout.setVerticalGroup(
             SidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(SidebarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
                 .addComponent(listData)
                 .addGap(18, 18, 18)
                 .addComponent(perhitungan)
@@ -475,7 +478,7 @@ public class MenuView extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 45, Short.MAX_VALUE))
+                .addGap(0, 33, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
