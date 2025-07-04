@@ -53,7 +53,7 @@ import net.sf.jasperreports.view.JasperViewer;
      *
      * @author mhdja
      */
-    public class Karyawan extends javax.swing.JPanel {
+    public class MasterDataTUKView extends javax.swing.JPanel {
         public final TukDao tukDao;
         public String selectedId;
 
@@ -84,7 +84,7 @@ import net.sf.jasperreports.view.JasperViewer;
     /**
      * Creates new form ListDataView
      */
-    public Karyawan() {
+    public MasterDataTUKView() {
         this.tukDao = new TukDaoImpl();
         
         initComponents();
