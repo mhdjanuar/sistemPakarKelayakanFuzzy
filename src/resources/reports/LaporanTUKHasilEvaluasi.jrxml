@@ -127,19 +127,19 @@ INNER JOIN  sistem_pakar_kelayakan_fuzzy.tuk  ON hasil_tuk.id_tuk = tuk.id;
 					<text><![CDATA[EVALUASI KELAYAKAN DAN AKREDITASI]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="110" y="52" width="421" height="20" forecolor="#000000" uuid="032d289b-bd98-4bc9-91e9-e8c4f05b6c90"/>
+					<reportElement x="145" y="51" width="350" height="20" forecolor="#000000" uuid="032d289b-bd98-4bc9-91e9-e8c4f05b6c90"/>
 					<textElement>
 						<font fontName="Times New Roman"/>
 					</textElement>
-					<text><![CDATA[Kw. Industri Pulogadung, Jl. Rawagatel No.35-40 Blok III-S, RT.10/RW.9, Jatinegara, Kec. Cakung]]></text>
+					<text><![CDATA[Casa Residence Cijantung Blok A8 Jl. Bima II No. 30 A Cijantung, Kec Pasar Rebo]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="170" y="76" width="281" height="20" forecolor="#000000" uuid="3e5fb385-5509-455e-9661-5a09670aeb3e"/>
-					<text><![CDATA[Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13930]]></text>
+					<text><![CDATA[Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13770]]></text>
 				</staticText>
 				<image>
 					<reportElement x="40" y="25" width="50" height="50" uuid="23d5bb3f-e081-4190-9f1d-1a95495589ee"/>
-                                        <imageExpression><![CDATA[$P{PATH}+"logo_lsp-removebg-preview.png"]]></imageExpression>
+                                        <imageExpression><![CDATA[$P{PATH}+"las_no_bg_200.png"]]></imageExpression>
 				</image>
 			</frame>
 		</band>
