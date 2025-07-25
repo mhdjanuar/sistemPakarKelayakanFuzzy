@@ -49,16 +49,15 @@
                       <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="buttonLogin" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="textFieldPassword" min="-2" pref="195" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="textFieldUsername" min="-2" pref="195" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="textFieldUsername" max="32767" attributes="0"/>
+                                  <Component id="textFieldPassword" pref="198" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -110,8 +109,6 @@
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="textFieldUsername">
-    </Component>
-    <Component class="javax.swing.JTextField" name="textFieldPassword">
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
@@ -236,6 +233,8 @@
           <Image iconType="3" name="/resources/images/icon_login-200.png"/>
         </Property>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JPasswordField" name="textFieldPassword">
     </Component>
   </SubComponents>
 </Form>

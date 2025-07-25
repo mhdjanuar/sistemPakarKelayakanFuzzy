@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -38,9 +39,11 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
@@ -75,8 +78,17 @@ public class PerhitunganSAW extends javax.swing.JPanel {
 
         // Masukkan data karyawan ke dalam model JTable
         for (FuzzyResult fuzzyList : fuzzyResult) {
+            String variabel = fuzzyList.getVariabel();
+
+            // Ganti nilai sesuai ketentuan
+            if ("kompetensi".equalsIgnoreCase(variabel)) {
+                variabel = "Ruang Konsultasi Pra Uji";
+            } else if ("sarana".equalsIgnoreCase(variabel)) {
+                variabel = "Ruang Uji Teori";
+            }
+
             model.addRow(new Object[]{
-                fuzzyList.getVariabel(),
+                variabel.toUpperCase(),
                 fuzzyList.getNilaiMembership()
             });
         }
@@ -124,41 +136,209 @@ public class PerhitunganSAW extends javax.swing.JPanel {
         dropdown.setPreferredSize(new Dimension(200, 25));
         jPanel2.add(dropdown, gbc);
 
-        // Baris 2: Nilai Kompetensi
+        // Baris 2: Checklist Ruang Konsultasi Pra Uji
         row++;
         gbc.gridx = 0; gbc.gridy = row;
-        jPanel2.add(new JLabel("Nilai Kompetensi (1 - 100):"), gbc);
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        jPanel2.add(new JLabel("Ruang Konsultasi Pra Uji:"), gbc);
 
         gbc.gridx = 1;
-        JTextField kompetensiField = new JTextField(15);
-        jPanel2.add(kompetensiField, gbc);
 
-        // Baris 3: Nilai Sarana
+        JPanel kompetensiPanel = new JPanel();
+        kompetensiPanel.setLayout(new BoxLayout(kompetensiPanel, BoxLayout.Y_AXIS));
+
+        Map<String, Integer> kompetensiMap = new LinkedHashMap<>();
+        kompetensiMap.put("Luas setiap ruang minimum 1,5 x 1,5 m", 17);
+        kompetensiMap.put("Kondisi Ruangan nyaman", 17);
+        kompetensiMap.put("Ventilasi, pertukaran udara memadai", 17);
+        kompetensiMap.put("Penerangan, standar", 17);
+        kompetensiMap.put("Meja kerja", 16);
+        kompetensiMap.put("Ruang pemeriksaan dan pengujian hasil", 16);
+
+        List<JCheckBox> kompetensiCheckboxList = new ArrayList<>();
+        JLabel totalKompetensiLabel = new JLabel("Total: 0");
+
+        for (Map.Entry<String, Integer> entry : kompetensiMap.entrySet()) {
+            JCheckBox cb = new JCheckBox(entry.getKey() + " (" + entry.getValue() + " point)");
+            cb.addActionListener(e -> {
+                int total = kompetensiCheckboxList.stream()
+                        .filter(JCheckBox::isSelected)
+                        .mapToInt(c -> kompetensiMap.get(c.getText().split(" \\(")[0]))
+                        .sum();
+                totalKompetensiLabel.setText("Total: " + total);
+                if (total > 100) {
+                    JOptionPane.showMessageDialog(null, "Total poin ruang konsultasi tidak boleh melebihi 100!", "Validasi", JOptionPane.WARNING_MESSAGE);
+                    cb.setSelected(false);
+                    total = kompetensiCheckboxList.stream()
+                            .filter(JCheckBox::isSelected)
+                            .mapToInt(c -> kompetensiMap.get(c.getText().split(" \\(")[0]))
+                            .sum();
+                    totalKompetensiLabel.setText("Total: " + total);
+                }
+            });
+            kompetensiCheckboxList.add(cb);
+            kompetensiPanel.add(cb);
+        }
+
+        kompetensiPanel.add(Box.createVerticalStrut(8));
+        kompetensiPanel.add(totalKompetensiLabel);
+
+        jPanel2.add(kompetensiPanel, gbc);
+
+        // Baris 3: Checklist Ruang Uji Teori
         row++;
         gbc.gridx = 0; gbc.gridy = row;
-        jPanel2.add(new JLabel("Nilai Sarana (1 - 100):"), gbc);
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        jPanel2.add(new JLabel("Ruang Uji Teori:"), gbc);
 
         gbc.gridx = 1;
-        JTextField saranaField = new JTextField(15);
-        jPanel2.add(saranaField, gbc);
 
-        // Baris 4: Nilai Dokumen
+        JPanel saranaPanel = new JPanel();
+        saranaPanel.setLayout(new BoxLayout(saranaPanel, BoxLayout.Y_AXIS));
+
+        Map<String, Integer> saranaMap = new LinkedHashMap<>();
+        saranaMap.put("Luas ruang sebanding dengan jumlah asesi", 17);
+        saranaMap.put("Kondisi ruangan nyaman", 17);
+        saranaMap.put("Ventilasi, pertukaran udara memadai", 17);
+        saranaMap.put("Penerangan, standar", 17);
+        saranaMap.put("Meja kerja", 16);
+        saranaMap.put("Ruang pemeriksaan dan pengujian hasil", 16);
+
+        List<JCheckBox> saranaCheckboxList = new ArrayList<>();
+        JLabel totalSaranaLabel = new JLabel("Total: 0");
+
+        for (Map.Entry<String, Integer> entry : saranaMap.entrySet()) {
+            JCheckBox cb = new JCheckBox(entry.getKey() + " (" + entry.getValue() + " point)");
+            cb.addActionListener(e -> {
+                int total = saranaCheckboxList.stream()
+                        .filter(JCheckBox::isSelected)
+                        .mapToInt(c -> saranaMap.get(c.getText().split(" \\(")[0]))
+                        .sum();
+                totalSaranaLabel.setText("Total: " + total);
+                if (total > 100) {
+                    JOptionPane.showMessageDialog(null, "Total poin ruang uji teori tidak boleh melebihi 100!", "Validasi", JOptionPane.WARNING_MESSAGE);
+                    cb.setSelected(false);
+                    total = saranaCheckboxList.stream()
+                        .filter(JCheckBox::isSelected)
+                        .mapToInt(c -> saranaMap.get(c.getText().split(" \\(")[0]))
+                        .sum();
+                    totalSaranaLabel.setText("Total: " + total);
+                }
+            });
+            saranaCheckboxList.add(cb);
+            saranaPanel.add(cb);
+        }
+
+        saranaPanel.add(Box.createVerticalStrut(8));
+        saranaPanel.add(totalSaranaLabel);
+
+        jPanel2.add(saranaPanel, gbc);
+
+
+        // Baris 4: Checklist Dokumen
         row++;
         gbc.gridx = 0; gbc.gridy = row;
-        jPanel2.add(new JLabel("Nilai Dokumen (1 - 100):"), gbc);
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        jPanel2.add(new JLabel("Dokumen:"), gbc);
 
         gbc.gridx = 1;
-        JTextField dokumenField = new JTextField(15);
-        jPanel2.add(dokumenField, gbc);
+
+        JPanel dokumenPanel = new JPanel();
+        dokumenPanel.setLayout(new BoxLayout(dokumenPanel, BoxLayout.Y_AXIS));
+
+        Map<String, Integer> dokumenMap = new LinkedHashMap<>();
+        dokumenMap.put("Standar Operasional Prosedur", 34);  // total 100 jika ketiganya
+        dokumenMap.put("Jadwal Kalibrasi", 33);
+        dokumenMap.put("Materi Uji Kompetensi", 33);
+
+        List<JCheckBox> dokumenCheckboxList = new ArrayList<>();
+        JLabel totalDokumenLabel = new JLabel("Total: 0");
+
+        for (Map.Entry<String, Integer> entry : dokumenMap.entrySet()) {
+            JCheckBox cb = new JCheckBox(entry.getKey() + " (" + entry.getValue() + " point)");
+            cb.addActionListener(e -> {
+                int total = dokumenCheckboxList.stream()
+                        .filter(JCheckBox::isSelected)
+                        .mapToInt(c -> dokumenMap.get(c.getText().split(" \\(")[0]))
+                        .sum();
+                totalDokumenLabel.setText("Total: " + total);
+                if (total > 100) {
+                    JOptionPane.showMessageDialog(null, "Total poin dokumen tidak boleh melebihi 100!", "Validasi", JOptionPane.WARNING_MESSAGE);
+                    cb.setSelected(false); // batalkan centang terakhir
+                    total = dokumenCheckboxList.stream()
+                        .filter(JCheckBox::isSelected)
+                        .mapToInt(c -> dokumenMap.get(c.getText().split(" \\(")[0]))
+                        .sum();
+                    totalDokumenLabel.setText("Total: " + total);
+                }
+            });
+            dokumenCheckboxList.add(cb);
+            dokumenPanel.add(cb);
+        }
+
+        dokumenPanel.add(Box.createVerticalStrut(8));
+        dokumenPanel.add(totalDokumenLabel);
+
+        jPanel2.add(dokumenPanel, gbc);
+
 
         // Baris 5: Nilai Peralatan
+        // Baris 5: Checklist Peralatan
         row++;
         gbc.gridx = 0; gbc.gridy = row;
-        jPanel2.add(new JLabel("Nilai Peralatan (1 - 100):"), gbc);
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        jPanel2.add(new JLabel("Peralatan:"), gbc);
 
         gbc.gridx = 1;
-        JTextField peralatanField = new JTextField(15);
-        jPanel2.add(peralatanField, gbc);
+
+        JPanel checklistPanel = new JPanel();
+        checklistPanel.setLayout(new BoxLayout(checklistPanel, BoxLayout.Y_AXIS));
+
+        // Map peralatan dan poin
+        Map<String, Integer> peralatanMap = new LinkedHashMap<>();
+        peralatanMap.put("Mesin las output AC/DC", 10);
+        peralatanMap.put("Welding gauge", 10);
+        peralatanMap.put("Mesin/alat potong", 10);
+        peralatanMap.put("Tang ampere", 10);
+        peralatanMap.put("Kaca pembesar", 10);
+        peralatanMap.put("Palu terak", 10);
+        peralatanMap.put("Sikat baja", 10);
+        peralatanMap.put("Penjepit", 10);
+        peralatanMap.put("Pahat", 10);
+        peralatanMap.put("Siku", 10);
+        peralatanMap.put("Senter", 10);
+        peralatanMap.put("Mistar baja", 10);
+
+        List<JCheckBox> checkboxList = new ArrayList<>();
+        JLabel totalPoinLabel = new JLabel("Total: 0");
+
+        for (Map.Entry<String, Integer> entry : peralatanMap.entrySet()) {
+            JCheckBox cb = new JCheckBox(entry.getKey() + " (" + entry.getValue() + " point)");
+            cb.addActionListener(e -> {
+                int total = checkboxList.stream()
+                        .filter(JCheckBox::isSelected)
+                        .mapToInt(c -> peralatanMap.get(c.getText().split(" \\(")[0]))
+                        .sum();
+                totalPoinLabel.setText("Total: " + total);
+                if (total > 100) {
+                    JOptionPane.showMessageDialog(null, "Total poin tidak boleh melebihi 100!", "Validasi", JOptionPane.WARNING_MESSAGE);
+                    cb.setSelected(false); // revert pilihan terakhir
+                    total = checkboxList.stream()
+                        .filter(JCheckBox::isSelected)
+                        .mapToInt(c -> peralatanMap.get(c.getText().split(" \\(")[0]))
+                        .sum();
+                    totalPoinLabel.setText("Total: " + total);
+                }
+            });
+            checkboxList.add(cb);
+            checklistPanel.add(cb);
+        }
+
+        checklistPanel.add(Box.createVerticalStrut(8));
+        checklistPanel.add(totalPoinLabel);
+        
+        
+        jPanel2.add(checklistPanel, gbc);
 
         // Tambahkan tombol simpan di bawah (opsional)
         row++;
@@ -214,17 +394,34 @@ public class PerhitunganSAW extends javax.swing.JPanel {
                 String tempatUji = (String) dropdown.getSelectedItem();
 
                 // Ambil nilai dari inputan
-                String nilaiKompetensi = kompetensiField.getText();
-                String nilaiSarana = saranaField.getText();
-                String nilaiDokumen = dokumenField.getText();
-                String nilaiPeralatan = peralatanField.getText();
+                int nilaiKompetensi = kompetensiCheckboxList.stream()
+                        .filter(JCheckBox::isSelected)
+                        .mapToInt(c -> kompetensiMap.get(c.getText().split(" \\(")[0]))
+                        .sum();
+                int nilaiSarana = saranaCheckboxList.stream()
+                        .filter(JCheckBox::isSelected)
+                        .mapToInt(c -> saranaMap.get(c.getText().split(" \\(")[0]))
+                        .sum();  
+                int nilaiDokumen = dokumenCheckboxList.stream()
+                        .filter(JCheckBox::isSelected)
+                        .mapToInt(c -> dokumenMap.get(c.getText().split(" \\(")[0]))
+                        .sum();;         
+                int nilaiPeralatan = checkboxList.stream()
+                        .filter(JCheckBox::isSelected)
+                        .mapToInt(cb -> peralatanMap.get(cb.getText().split(" \\(")[0]))
+                        .sum();
+                
+                System.out.println("total nilai 1" + nilaiKompetensi);
+                System.out.println("total nilai 2" + nilaiSarana);
+                System.out.println("total nilai 3" + nilaiDokumen);
+                System.out.println("total nilai 4" + nilaiPeralatan);
 
                 // Optional: Validasi input angka 1–100
                 try {
-                    double kompetensi = Integer.parseInt(nilaiKompetensi);
-                    double sarana = Integer.parseInt(nilaiSarana);
-                    double dokumen = Integer.parseInt(nilaiDokumen);
-                    double peralatan = Integer.parseInt(nilaiPeralatan);
+                    double kompetensi = nilaiKompetensi;
+                    double sarana = nilaiSarana;
+                    double dokumen = nilaiDokumen;
+                    double peralatan = nilaiPeralatan;
 
                     if (kompetensi < 1 || kompetensi > 100 || 
                         sarana < 1 || sarana > 100 || 
@@ -235,7 +432,6 @@ public class PerhitunganSAW extends javax.swing.JPanel {
                     }
                     
                     handleFuzzyLogic(kompetensi, sarana, dokumen, peralatan);
-
 
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Masukkan nilai angka yang valid!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -360,7 +556,7 @@ public class PerhitunganSAW extends javax.swing.JPanel {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 827, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -403,7 +599,7 @@ public class PerhitunganSAW extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 826, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 827, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE))

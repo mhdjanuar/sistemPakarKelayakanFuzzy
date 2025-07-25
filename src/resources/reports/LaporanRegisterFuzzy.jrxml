@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportRangking" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7d624f2a-8e2a-459a-a0d2-e588c53b0ed6">
-	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LaporanKaryawan" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dcc37421-c63f-4cff-b7ec-523a06ea6962">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MySQL"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -30,72 +30,90 @@
 			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<subDataset name="rangking" uuid="739e88c1-94a5-441c-824b-d82d06149ff7">
+	<subDataset name="Karyawan" uuid="b8084ae9-3007-4b68-9d3c-73a473780b85">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MySQL"/>
 		<queryString language="SQL">
-			<![CDATA[SELECT 
-    p.name AS nama_pelanggan,
-    ROUND(SUM(
-        CASE 
-            WHEN c.type = 'benefit' THEN (sc.jumlah_bobot / pembagi_table.pembagi) * (c.bobot / total_weight.total)
-            WHEN c.type = 'cost' THEN (pembagi_table.pembagi / sc.jumlah_bobot) * (c.bobot / total_weight.total)
-        END
-    ), 4) AS total_nilai,
-    RANK() OVER (ORDER BY 
-        SUM(
-            CASE 
-                WHEN c.type = 'benefit' THEN (sc.jumlah_bobot / pembagi_table.pembagi) * (c.bobot / total_weight.total)
-                WHEN c.type = 'cost' THEN (pembagi_table.pembagi / sc.jumlah_bobot) * (c.bobot / total_weight.total)
-            END
-        ) DESC
-    ) AS peringkat
-FROM saw_kinerja_karyawan_biznet.alternatif AS a
-JOIN saw_kinerja_karyawan_biznet.employees AS p ON a.id_employee = p.id
-JOIN saw_kinerja_karyawan_biznet.sub_criteria AS sc ON a.id_sub_kreteria = sc.id
-JOIN saw_kinerja_karyawan_biznet.criteria AS c ON sc.id_kreteria = c.id
-
--- Subquery untuk menghitung nilai pembagi tiap kriteria
-JOIN (
-    SELECT 
-        c.id AS id_kriteria,
-        CASE 
-            WHEN c.type = 'benefit' THEN MAX(sc.jumlah_bobot)
-            WHEN c.type = 'cost' THEN MIN(sc.jumlah_bobot)
-        END AS pembagi
-    FROM saw_kinerja_karyawan_biznet.alternatif AS a
-    JOIN saw_kinerja_karyawan_biznet.sub_criteria AS sc ON a.id_sub_kreteria = sc.id
-    JOIN saw_kinerja_karyawan_biznet.criteria AS c ON sc.id_kreteria = c.id
-    GROUP BY c.id, c.type
-) AS pembagi_table ON pembagi_table.id_kriteria = c.id
-
--- Subquery untuk total bobot
-JOIN (
-    SELECT SUM(bobot) AS total FROM saw_kinerja_karyawan_biznet.criteria
-) AS total_weight
-
-GROUP BY p.name
-ORDER BY total_nilai DESC;]]>
+			<![CDATA[select * from  lady_yakult_nb.users]]>
 		</queryString>
-		<field name="nama_pelanggan" class="java.lang.String">
+		<field name="id" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.name" value="id"/>
+			<property name="com.jaspersoft.studio.field.label" value="id"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+		</field>
+		<field name="username" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="username"/>
+			<property name="com.jaspersoft.studio.field.label" value="username"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+		</field>
+		<field name="email" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="email"/>
+			<property name="com.jaspersoft.studio.field.label" value="email"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+		</field>
+		<field name="password" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="password"/>
+			<property name="com.jaspersoft.studio.field.label" value="password"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+		</field>
+		<field name="fullname" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="fullname"/>
+			<property name="com.jaspersoft.studio.field.label" value="fullname"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+		</field>
+		<field name="created_at" class="java.sql.Timestamp">
+			<property name="com.jaspersoft.studio.field.name" value="created_at"/>
+			<property name="com.jaspersoft.studio.field.label" value="created_at"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+		</field>
+		<field name="updated_at" class="java.sql.Timestamp">
+			<property name="com.jaspersoft.studio.field.name" value="updated_at"/>
+			<property name="com.jaspersoft.studio.field.label" value="updated_at"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+		</field>
+	</subDataset>
+	<subDataset name="Pengguna" uuid="62a1a9a9-0aca-4efc-9249-5e7f00dee197">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MySQL"/>
+		<queryString language="SQL">
+			<![CDATA[select * from  sistem_pakar_kelayakan_fuzzy.users]]>
+		</queryString>
+		<field name="id" class="java.lang.Long">
+			<property name="com.jaspersoft.studio.field.name" value="id"/>
+			<property name="com.jaspersoft.studio.field.label" value="id"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+		</field>
+		<field name="name" class="java.lang.String">
 			<property name="com.jaspersoft.studio.field.name" value="name"/>
-			<property name="com.jaspersoft.studio.field.label" value="nama_pelanggan"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="employees"/>
+			<property name="com.jaspersoft.studio.field.label" value="name"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
 		</field>
-		<field name="total_nilai" class="java.math.BigDecimal">
-			<property name="com.jaspersoft.studio.field.name" value="total_nilai"/>
-			<property name="com.jaspersoft.studio.field.label" value="total_nilai"/>
+		<field name="alamat" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="alamat"/>
+			<property name="com.jaspersoft.studio.field.label" value="alamat"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
 		</field>
-		<field name="peringkat" class="java.lang.Long">
-			<property name="com.jaspersoft.studio.field.name" value="peringkat"/>
-			<property name="com.jaspersoft.studio.field.label" value="peringkat"/>
+		<field name="username" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="username"/>
+			<property name="com.jaspersoft.studio.field.label" value="username"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+		</field>
+		<field name="password" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="password"/>
+			<property name="com.jaspersoft.studio.field.label" value="password"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+		</field>
+		<field name="email" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="email"/>
+			<property name="com.jaspersoft.studio.field.label" value="email"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
 		</field>
 	</subDataset>
 	<parameter name="PATH" class="java.lang.String"/>
-	<queryString language="SQL">
-		<![CDATA[select * from saw_kinerja_karyawan_biznet.users limit 1]]>
+	<queryString>
+		<![CDATA[select * from  sistem_pakar_kelayakan_fuzzy.users   limit 1]]>
 	</queryString>
-	<field name="id" class="java.lang.Integer">
+	<field name="id" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.name" value="id"/>
 		<property name="com.jaspersoft.studio.field.label" value="id"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
@@ -168,18 +186,18 @@ ORDER BY total_nilai DESC;]]>
 	<columnHeader>
 		<band height="61" splitType="Stretch">
 			<staticText>
-				<reportElement x="133" y="10" width="288" height="30" uuid="6b8953ca-8c11-4aeb-9ad4-3c1ab1a01c21"/>
+				<reportElement x="133" y="10" width="288" height="30" uuid="222cf86e-0580-4d2b-ac71-25413fea9a68"/>
 				<textElement textAlignment="Center">
 					<font size="20" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Laporan Rangking]]></text>
+				<text><![CDATA[Laporan Data Pengguna]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="260" splitType="Stretch">
+		<band height="285" splitType="Stretch">
 			<componentElement>
-				<reportElement x="-17" y="10" width="587" height="250" uuid="e21673d6-5a55-4b45-bdb6-57f22f1636f4">
+				<reportElement x="-10" y="10" width="570" height="200" uuid="f8c04a77-068e-47ad-b428-c85fbeebc88c">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
@@ -188,78 +206,79 @@ ORDER BY total_nilai DESC;]]>
 					<property name="com.jaspersoft.studio.components.autoresize.proportional" value="true"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="rangking" uuid="1b56965f-62a3-412f-9fdb-40d771d3ccd4">
+					<datasetRun subDataset="Pengguna" uuid="6864610c-d915-4ac5-b200-a21e655fe12f">
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
-					<jr:column width="196" uuid="a7948710-4be9-4a5a-ac94-202593a65da1">
+					<jr:column width="191" uuid="ad780743-2b35-4496-8dbe-7875d345ccac">
 						<jr:tableHeader style="Table_TH" height="30">
 							<staticText>
-								<reportElement x="0" y="0" width="196" height="30" uuid="9e2d8c45-9a8f-4fea-8e61-a1bd40a5bbd7">
+								<reportElement x="0" y="0" width="191" height="30" uuid="625ea16a-5a73-4391-9261-7a1dbd197e84">
 									<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Center">
 									<paragraph spacingBefore="10"/>
 								</textElement>
-								<text><![CDATA[Nama Peserta]]></text>
+								<text><![CDATA[ID Pengguna]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
-								<reportElement x="0" y="0" width="196" height="30" uuid="cf854987-928a-4d7d-b3f0-81412608013a">
+								<reportElement x="0" y="0" width="191" height="30" uuid="05054f45-7a9e-40b2-8e3a-24992d19496c">
+									<property name="com.jaspersoft.studio.unit.firstLineIndent" value="pixel"/>
 									<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Center">
 									<paragraph spacingBefore="10"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{nama_pelanggan}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="196" uuid="31f2ee6d-5ae2-4243-b614-8a6a5d4a3cee">
+					<jr:column width="190" uuid="dde341f9-8e15-4aea-b5f5-9411219444b1">
 						<jr:tableHeader style="Table_TH" height="30">
 							<staticText>
-								<reportElement x="0" y="0" width="196" height="30" uuid="d6f54534-28d0-4995-85cd-ba23ab963340">
+								<reportElement x="0" y="0" width="190" height="30" uuid="84c536c7-1844-4265-8fc5-4fcc9424b49b">
 									<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Center">
 									<paragraph spacingBefore="10"/>
 								</textElement>
-								<text><![CDATA[Total Nilai]]></text>
+								<text><![CDATA[Username]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
-								<reportElement x="0" y="0" width="196" height="30" uuid="ac010d17-20d7-4b84-9e4f-7214f14c2e25">
+								<reportElement x="0" y="0" width="190" height="30" uuid="bc98e22f-9484-4c35-90eb-bb78c34cdd79">
 									<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Center">
 									<paragraph spacingBefore="10"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{total_nilai}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{username}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="195" uuid="49f8cd2a-52f2-4c94-876d-f5dc08164b83">
+					<jr:column width="189" uuid="551b205e-7605-41e8-bfee-a2c29c5cedd1">
 						<jr:tableHeader style="Table_TH" height="30">
 							<staticText>
-								<reportElement x="0" y="0" width="195" height="30" uuid="68827649-5122-4762-897c-729b4198a33a">
+								<reportElement x="0" y="0" width="189" height="30" uuid="7be6bb37-50cd-4a5d-824b-a07dd6b36fd9">
 									<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Center">
 									<paragraph spacingBefore="10"/>
 								</textElement>
-								<text><![CDATA[Rangking]]></text>
+								<text><![CDATA[Email]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
-								<reportElement x="0" y="0" width="195" height="30" uuid="4f3f380f-8640-42b3-b99b-c5fd7ddb67b2">
+								<reportElement x="0" y="0" width="189" height="30" uuid="0ff2a0f9-297f-42c4-b81f-57828a356361">
 									<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
 								</reportElement>
 								<textElement textAlignment="Center">
 									<paragraph spacingBefore="10"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{peringkat}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
