@@ -38,12 +38,14 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
@@ -117,24 +119,32 @@ public class PerhitunganSAW extends javax.swing.JPanel {
 
         int row = 0;
 
-        // Baris 1: Dropdown
+        // Baris 1: Radio Button Tempat Uji Kompetensi
         gbc.gridx = 0; gbc.gridy = row;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
         jPanel2.add(new JLabel("Tempat Uji Kompetensi:"), gbc);
 
         gbc.gridx = 1;
-        
+
         List<TukModel> tukList = tukDao.findAll();
-        
-        JComboBox<String> dropdown = new JComboBox<>();
-        
-        // Tambahkan item ke dropdown
+
+        ButtonGroup tukButtonGroup = new ButtonGroup();
+        JPanel tukPanel = new JPanel();
+        tukPanel.setLayout(new BoxLayout(tukPanel, BoxLayout.Y_AXIS));
+
         for (TukModel tuk : tukList) {
-            dropdown.addItem(tuk.getNamaTuk());
-            this.selectedIdTuk = tuk.getId();
+            JRadioButton rb = new JRadioButton(tuk.getNamaTuk());
+            tukButtonGroup.add(rb);
+            tukPanel.add(rb);
+
+            // Listener untuk menyimpan ID saat dipilih
+            rb.addActionListener(e -> {
+                this.selectedIdTuk = tuk.getId();
+            });
         }
-        
-        dropdown.setPreferredSize(new Dimension(200, 25));
-        jPanel2.add(dropdown, gbc);
+
+        jPanel2.add(tukPanel, gbc);
+
 
         // Baris 2: Checklist Ruang Konsultasi Pra Uji
         row++;
@@ -391,7 +401,7 @@ public class PerhitunganSAW extends javax.swing.JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Ambil nilai dari dropdown
-                String tempatUji = (String) dropdown.getSelectedItem();
+                int tempatUji = selectedIdTuk;
 
                 // Ambil nilai dari inputan
                 int nilaiKompetensi = kompetensiCheckboxList.stream()
@@ -405,7 +415,7 @@ public class PerhitunganSAW extends javax.swing.JPanel {
                 int nilaiDokumen = dokumenCheckboxList.stream()
                         .filter(JCheckBox::isSelected)
                         .mapToInt(c -> dokumenMap.get(c.getText().split(" \\(")[0]))
-                        .sum();;         
+                        .sum();        
                 int nilaiPeralatan = checkboxList.stream()
                         .filter(JCheckBox::isSelected)
                         .mapToInt(cb -> peralatanMap.get(cb.getText().split(" \\(")[0]))

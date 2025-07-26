@@ -7,6 +7,9 @@ public class TukModel {
     private String alamat;
     private String noTelepon;
     private String email;
+    private String kecamatan;
+    private String kabupaten;
+    private String provinsi;
 
     public int getId() {
         return id;
@@ -54,5 +57,29 @@ public class TukModel {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getKecamatan() {
+        return kecamatan;
+    }
+
+    public void setKecamatan(String kecamatan) {
+        this.kecamatan = kecamatan;
+    }
+
+    public String getKabupaten() {
+        return kabupaten;
+    }
+
+    public void setKabupaten(String kabupaten) {
+        this.kabupaten = kabupaten;
+    }
+
+    public String getProvinsi() {
+        return provinsi;
+    }
+
+    public void setProvinsi(String provinsi) {
+        this.provinsi = provinsi;
     }
 }

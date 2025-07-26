@@ -57,33 +57,36 @@ import net.sf.jasperreports.view.JasperViewer;
         public final TukDao tukDao;
         public String selectedId;
 
-       public void getAllData() {
-            // Ambil data dari database
-            List<TukModel> tukList = tukDao.findAll();
+      public void getAllData() {
+        // Ambil data dari database
+        List<TukModel> tukList = tukDao.findAll();
 
-            // Buat model tabel
-            DefaultTableModel model = new DefaultTableModel();
-            model.setColumnIdentifiers(new Object[]{
-                "No", "ID TUK", "Nama", "Alamat"
+        // Buat model tabel
+        DefaultTableModel model = new DefaultTableModel();
+        model.setColumnIdentifiers(new Object[]{
+            "No", "ID TUK", "Nama", "Kecamatan", "Kabupaten", "Provinsi"
+        });
+
+        int no = 1;
+        for (TukModel tuk : tukList) {
+            model.addRow(new Object[]{
+                String.format("%04d", tuk.getId()), // No urut
+                tuk.getId(),                       // ID TUK (disembunyikan)
+                tuk.getNamaTuk(),
+                tuk.getKecamatan(),
+                tuk.getKabupaten(),
+                tuk.getProvinsi()
             });
-
-            int no = 1;
-            for (TukModel tuk : tukList) {
-                model.addRow(new Object[]{
-                    String.format("%04d", tuk.getId()), // Nomor urut
-                    tuk.getId(), // Format ID 4 digit
-                    tuk.getNamaTuk(),
-                    tuk.getAlamat()
-                });
-            }
-
-            jTable1.setModel(model);
-
-            // Sembunyikan kolom "ID TUK" (kolom ke-1, index mulai dari 0)
-            jTable1.getColumnModel().getColumn(1).setMinWidth(0);
-            jTable1.getColumnModel().getColumn(1).setMaxWidth(0);
-            jTable1.getColumnModel().getColumn(1).setWidth(0);
         }
+
+        jTable1.setModel(model);
+
+        // Sembunyikan kolom "ID TUK" (kolom ke-1, index mulai dari 0)
+        jTable1.getColumnModel().getColumn(1).setMinWidth(0);
+        jTable1.getColumnModel().getColumn(1).setMaxWidth(0);
+        jTable1.getColumnModel().getColumn(1).setWidth(0);
+    }
+
 
 
     
@@ -105,27 +108,34 @@ import net.sf.jasperreports.view.JasperViewer;
 
                 // Ambil data dari baris yang diklik
                 String nama = jTable1.getValueAt(selectedRow, 2).toString();
-                String jabatan = jTable1.getValueAt(selectedRow, 3).toString();
-                
-                this.selectedId = jTable1.getValueAt(selectedRow, 1).toString();
+                String kecamatan = jTable1.getValueAt(selectedRow, 3).toString();
+                String kabupaten = jTable1.getValueAt(selectedRow, 4).toString();
+                String provinsi = jTable1.getValueAt(selectedRow, 5).toString();
+
+                this.selectedId = jTable1.getValueAt(selectedRow, 0).toString();
 
                 // Tampilkan ke form
                 txtNama.setText(nama);
-                txtAlamat.setText(jabatan);
+                txtKecamatan.setText(kecamatan);
+                txtKabupaten.setText(kabupaten);
+                txtProvinsi.setText(provinsi);
             }
         });
+
 
     }
     
     public void clearForm() {
         // Clear all the text fields
-        txtNama.setText("");  // Menghapus teks di text field Nama
-        txtAlamat.setText("");  // Menghapus teks di text field Usia
-
+        txtNama.setText("");         // Menghapus teks di text field Nama
+        txtKecamatan.setText("");    // Menghapus teks di text field Kecamatan
+        txtKabupaten.setText("");    // Menghapus teks di text field Kabupaten
+        txtProvinsi.setText("");     // Menghapus teks di text field Provinsi
 
         // Log untuk memastikan form di-clear
         System.out.println("Form berhasil dibersihkan.");
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -142,15 +152,18 @@ import net.sf.jasperreports.view.JasperViewer;
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtNama = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        txtAlamat = new javax.swing.JTextArea();
+        jLabel4 = new javax.swing.JLabel();
+        txtKecamatan = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        txtKabupaten = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        txtProvinsi = new javax.swing.JTextField();
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -164,8 +177,6 @@ import net.sf.jasperreports.view.JasperViewer;
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setText("Masukan Nama");
-
-        jLabel2.setText("Alamat");
 
         jButton1.setText("SIMPAN");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -204,9 +215,11 @@ import net.sf.jasperreports.view.JasperViewer;
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setText("FORM TEMPAT UJI KOMPETENSI");
 
-        txtAlamat.setColumns(20);
-        txtAlamat.setRows(5);
-        jScrollPane3.setViewportView(txtAlamat);
+        jLabel4.setText("Kecamatan");
+
+        jLabel5.setText("Kabupaten");
+
+        jLabel6.setText("Provinsi");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -214,12 +227,16 @@ import net.sf.jasperreports.view.JasperViewer;
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(txtNama, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
+                    .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(jScrollPane3))
+                    .addComponent(jLabel4)
+                    .addComponent(txtKecamatan, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtKabupaten, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtProvinsi, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -247,9 +264,17 @@ import net.sf.jasperreports.view.JasperViewer;
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel2)
+                        .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtKecamatan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtKabupaten, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtProvinsi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
@@ -279,39 +304,49 @@ import net.sf.jasperreports.view.JasperViewer;
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // Ambil nilai input dari form
         String nama = txtNama.getText().trim();
-        String alamat = txtAlamat.getText().trim();
+        String kecamatan = txtKecamatan.getText().trim();
+        String kabupaten = txtKabupaten.getText().trim();
+        String provinsi = txtProvinsi.getText().trim();
 
         // Log input yang diterima
         System.out.println("Nama: " + nama);
-       
+        System.out.println("Kecamatan: " + kecamatan);
+        System.out.println("Kabupaten: " + kabupaten);
+        System.out.println("Provinsi: " + provinsi);
 
         // Set ke model
         TukModel tuk = new TukModel();
         tuk.setNamaTuk(nama);
-        tuk.setAlamat(alamat);
+        tuk.setKecamatan(kecamatan);
+        tuk.setKabupaten(kabupaten);
+        tuk.setProvinsi(provinsi);
 
-//         Simpan ke DB (uncomment baris ini untuk mengaktifkan penyimpanan)
-         int result = tukDao.create(tuk);
-         if (result > 0) {
-             JOptionPane.showMessageDialog(this, "Data tempat uji kompetensi berhasil disimpan.");
-             getAllData();
-             clearForm();
-         } else {
-             JOptionPane.showMessageDialog(this, "Gagal menyimpan data tempat uji kompetensi.");
-         }
+        // Simpan ke DB
+        int result = tukDao.create(tuk);
+        if (result > 0) {
+            JOptionPane.showMessageDialog(this, "Data tempat uji kompetensi berhasil disimpan.");
+            getAllData();
+            clearForm();
+        } else {
+            JOptionPane.showMessageDialog(this, "Gagal menyimpan data tempat uji kompetensi.");
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-//          Ambil nilai input dari form
+    // Ambil nilai input dari form
         String nama = txtNama.getText().trim();
-        String alamat = txtAlamat.getText().trim();
+        String kecamatan = txtKecamatan.getText().trim();
+        String kabupaten = txtKabupaten.getText().trim();
+        String provinsi = txtProvinsi.getText().trim();
 
         // Set ke model
         TukModel tuk = new TukModel();
-        tuk.setId(parseInt(this.selectedId)); // ID Karyawan yang akan diupdate
+        tuk.setId(Integer.parseInt(this.selectedId)); // ID TUK yang akan diupdate
         tuk.setNamaTuk(nama);
-        tuk.setAlamat(alamat);
-        
+        tuk.setKecamatan(kecamatan);
+        tuk.setKabupaten(kabupaten);
+        tuk.setProvinsi(provinsi);
+
         // Panggil fungsi update di DAO
         int result = tukDao.update(tuk);
         if (result > 0) {
@@ -345,15 +380,18 @@ import net.sf.jasperreports.view.JasperViewer;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea txtAlamat;
+    private javax.swing.JTextField txtKabupaten;
+    private javax.swing.JTextField txtKecamatan;
     private javax.swing.JTextField txtNama;
+    private javax.swing.JTextField txtProvinsi;
     // End of variables declaration//GEN-END:variables
 }

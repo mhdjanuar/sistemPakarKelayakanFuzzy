@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package application.daoimpl;
 
 import application.dao.TukDao;
@@ -38,6 +34,9 @@ public class TukDaoImpl implements TukDao {
                 tuk.setAlamat(resultSet.getString("alamat"));
                 tuk.setNoTelepon(resultSet.getString("no_telepon"));
                 tuk.setEmail(resultSet.getString("email"));
+                tuk.setKecamatan(resultSet.getString("kecamatan"));
+                tuk.setKabupaten(resultSet.getString("kabupaten"));
+                tuk.setProvinsi(resultSet.getString("provinsi"));
                 list.add(tuk);
             }
         } catch (SQLException e) {
@@ -51,13 +50,17 @@ public class TukDaoImpl implements TukDao {
     @Override
     public int create(TukModel tuk) {
         try {
-            query = "INSERT INTO tuk(nama_tuk, instansi_penyelenggara, alamat, no_telepon, email) VALUES (?, ?, ?, ?, ?)";
+            query = "INSERT INTO tuk(nama_tuk, instansi_penyelenggara, alamat, no_telepon, email, kecamatan, kabupaten, provinsi) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             pstmt = dbConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, tuk.getNamaTuk());
             pstmt.setString(2, "Instansi");
-            pstmt.setString(3, tuk.getAlamat());
-            pstmt.setString(4, "089123123123");
-            pstmt.setString(5, "tuk@gmail.com");
+            pstmt.setString(3, "Test");
+            pstmt.setString(4, tuk.getNoTelepon());
+            pstmt.setString(5, tuk.getEmail());
+            pstmt.setString(6, tuk.getKecamatan());
+            pstmt.setString(7, tuk.getKabupaten());
+            pstmt.setString(8, tuk.getProvinsi());
 
             int result = pstmt.executeUpdate();
             resultSet = pstmt.getGeneratedKeys();
@@ -73,14 +76,17 @@ public class TukDaoImpl implements TukDao {
     @Override
     public int update(TukModel tuk) {
         try {
-            query = "UPDATE tuk SET nama_tuk = ?, instansi_penyelenggara = ?, alamat = ?, no_telepon = ?, email = ? WHERE id = ?";
+            query = "UPDATE tuk SET nama_tuk = ?, instansi_penyelenggara = ?, alamat = ?, no_telepon = ?, email = ?, kecamatan = ?, kabupaten = ?, provinsi = ? WHERE id = ?";
             pstmt = dbConnection.prepareStatement(query);
             pstmt.setString(1, tuk.getNamaTuk());
-              pstmt.setString(2, "Instansi");
-            pstmt.setString(3, tuk.getAlamat());
-            pstmt.setString(4, "089123123123");
-            pstmt.setString(5, "tuk@gmail.com");
-            pstmt.setInt(6, tuk.getId());
+            pstmt.setString(2, "Instansi");
+            pstmt.setString(3, "Test");
+            pstmt.setString(4, tuk.getNoTelepon());
+            pstmt.setString(5, tuk.getEmail());
+            pstmt.setString(6, tuk.getKecamatan());
+            pstmt.setString(7, tuk.getKabupaten());
+            pstmt.setString(8, tuk.getProvinsi());
+            pstmt.setInt(9, tuk.getId());
 
             return pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -113,4 +119,3 @@ public class TukDaoImpl implements TukDao {
         }
     }
 }
-
